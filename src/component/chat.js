@@ -137,9 +137,8 @@ export default function ChatRoom() {
           <div>
             {showTable && <button onClick={hideUserList}> Hide User List</button>}
             {!showTable && <button onClick={showUserList}>Show User List</button>}
-       
             {isLoading && <h2>Loading...</h2>}
-            {showTable ? (
+            {showTable && 
               <div className="showTable">
                 <table>
                   <tr>
@@ -156,16 +155,12 @@ export default function ChatRoom() {
                   })}
                 </table> 
               </div>
-            ) : (
-              <div></div>
-            )}
+            }
           </div>
           <br />
           <div>
             {user.state === "Online" && <button onClick={changeStatus}>Set to Do Not Disturb</button>}
             {user.state === "DoNotDisturb" && <button onClick={changeStatus}>Set me Online</button>}
-            
-            
           </div>
         </div>
       ) : (
