@@ -4,6 +4,8 @@ import { over } from "stompjs";
 import axios from "axios";
 import ChatAppService from "../service/chatapp.service";
 
+
+
 var stompClient = null;
 export default function ChatRoom() {
   const [user, setUser] = useState({
@@ -14,6 +16,7 @@ export default function ChatRoom() {
     sessionName: "",
     state: "",
   });
+  const BASE_URL = "http://localhost:8080/"
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState({ users: [] });
   const [showTable, setShowTable] = useState(false);
@@ -31,7 +34,7 @@ export default function ChatRoom() {
   };
 
   const registerUser = () => {
-    let Sock = new SockJS("http://localhost:8080/myws");
+    let Sock = new SockJS(BASE_URL+"myws");
     stompClient = over(Sock);
     stompClient.connect({ username: user.username }, onConnected, onError);
     getAllUsers();
@@ -39,16 +42,13 @@ export default function ChatRoom() {
   const getAllUsers = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8080/getAllUser");
+      const response = await axios.get(BASE_URL+"getAllUser");
       setUsers(response.data);
-      console.log(users);
     } catch (err) {
       setErr(err.message);
       setShowTable(false);
     } finally {
       setIsLoading(false);
-
-      console.log("Users are", users);
     }
   };
 
@@ -69,12 +69,12 @@ export default function ChatRoom() {
     axios
       .get("http://localhost:8080/changeStatus/?name=" + user.username)
       .then((res, err) => {
-        console.log(res.data);
+        // console.log(res.data);
         setUser({ ...user, state: res.data.state });
       });
   };
   const sendPublicMessage = () => {
-    console.log("here is name", user.sessionName);
+    // console.log("here is name", user.sessionName);
     if (stompClient) {
       let chatMessage = {
         senderName: user.username,
@@ -92,7 +92,7 @@ export default function ChatRoom() {
       connected: true,
       sessionName: message.headers["user-name"],
     });
-    console.log("user is", user);
+    // console.log("user is", user);
     stompClient.subscribe("/user/topic/public", onPublicMessageReceived, {
       name: user.username,
     });
@@ -101,7 +101,7 @@ export default function ChatRoom() {
     console.log(err);
   };
   const onPublicMessageReceived = (message) => {
-    console.log("<<<<<<<<<<<<", user);
+    // console.log("<<<<<<<<<<<<", user);
     if (user.state === "Online") {
       let messageData = JSON.parse(message.body);
       publicChats.push(messageData);
@@ -116,6 +116,8 @@ export default function ChatRoom() {
       {user.connected ? (
         <div className="connected">
           <h1>Welcome {user.username.toUpperCase()}</h1>
+          {user.state === "Online" && <h4> You are Online </h4>}
+          {user.state === "DoNotDisturb" && <h4> Do Not Disturb mode is ON</h4>}
           <div>
             {publicChats.map((chat) => (
               <li>
@@ -159,10 +161,10 @@ export default function ChatRoom() {
           <br />
           <div>
             {" "}
-            <button onClick={changeStatus}>changeMystatus</button>
-            {user.state === "DoNotDisturb" && (
-              <h3> {user.username} is set as "Do not disturb"</h3>
-            )}
+            {user.state === "Online" && <button onClick={changeStatus}>Set to Do Not Disturb</button>}
+            {user.state === "DoNotDisturb" && <button onClick={changeStatus}>Set me Online</button>}
+            
+            
           </div>
         </div>
       ) : (
