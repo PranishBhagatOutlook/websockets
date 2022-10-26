@@ -1,10 +1,9 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
 import ChatRoom from "./component/chat";
 function App() {
   return (
     <div className="App">
-    <ChatRoom/>
+      <ChatRoom />
     </div>
   );
 }
