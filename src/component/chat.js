@@ -21,8 +21,7 @@ export default function ChatRoom() {
   const [publicChats, setpublicChats] = useState([]);
 
   const register = (event) => {
-    const { value } = event.target;
-    setUser({ ...user, username: value });
+    setUser({ ...user, username: event.target.value });
   };
 
   const handleMessage = (event) => {
@@ -112,7 +111,7 @@ export default function ChatRoom() {
     <div>
       {user.connected ? (
         <div className="connected">
-          <h1>Welcome {user.username.toUpperCase()}</h1>
+          <h1> User: { user.username.toUpperCase()}</h1> 
           {user.state === "Online" && <h4> You are Online </h4>}
           {user.state === "DoNotDisturb" && <h4> Do Not Disturb mode is ON</h4>}
           <div>
@@ -165,7 +164,7 @@ export default function ChatRoom() {
         </div>
       ) : (
         <div className="register">
-          <input value={user.username} onChange={register} />
+          <input value={user.username} onChange={register} placeholder="Enter username"/>
           <button onClick={registerUser}>join</button>
         </div>
       )}
