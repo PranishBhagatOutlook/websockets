@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import SockJS from "sockjs-client";
 import { over } from "stompjs";
 import axios from "axios";
-import ChatAppService from "../service/chatapp.service";
-
-
 
 var stompClient = null;
 export default function ChatRoom() {
@@ -141,6 +138,7 @@ export default function ChatRoom() {
             {showTable && 
               <div className="showTable">
                 <table>
+                  <tbody>
                   <tr>
                     <th>Username</th>
                     <th>State</th>
@@ -153,6 +151,8 @@ export default function ChatRoom() {
                       </tr>
                     );
                   })}
+                  </tbody>
+                  
                 </table> 
               </div>
             }
