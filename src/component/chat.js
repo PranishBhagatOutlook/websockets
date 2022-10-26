@@ -67,7 +67,7 @@ export default function ChatRoom() {
 
   const changeStatus = () => {
     axios
-      .get("http://localhost:8080/changeStatus/?name=" + user.username)
+      .get(BASE_URL+"changeStatus/?name=" + user.username)
       .then((res, err) => {
         // console.log(res.data);
         setUser({ ...user, state: res.data.state });
@@ -133,8 +133,11 @@ export default function ChatRoom() {
               <button onClick={sendPublicMessage}>send</button>
             </div>
           </div>
+          <br />
           <div>
-            <br /> <button onClick={showUserList}>Show User List</button>
+            {showTable && <button onClick={hideUserList}> Hide User List</button>}
+            {!showTable && <button onClick={showUserList}>Show User List</button>}
+       
             {isLoading && <h2>Loading...</h2>}
             {showTable ? (
               <div className="showTable">
@@ -151,8 +154,7 @@ export default function ChatRoom() {
                       </tr>
                     );
                   })}
-                </table>
-                <button onClick={hideUserList}> Hide</button>
+                </table> 
               </div>
             ) : (
               <div></div>
@@ -160,7 +162,6 @@ export default function ChatRoom() {
           </div>
           <br />
           <div>
-            {" "}
             {user.state === "Online" && <button onClick={changeStatus}>Set to Do Not Disturb</button>}
             {user.state === "DoNotDisturb" && <button onClick={changeStatus}>Set me Online</button>}
             
