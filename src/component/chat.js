@@ -70,6 +70,12 @@ export default function ChatRoom() {
         // console.log(res.data);
         setUser({ ...user, state: res.data.state });
       });
+    let chatMessage = {
+      senderName: user.username,
+      message: "My status is "+ user.state,
+      status: "MESSAGE",
+    };
+    stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
   };
   const sendPublicMessage = () => {
     // console.log("here is name", user.sessionName);
