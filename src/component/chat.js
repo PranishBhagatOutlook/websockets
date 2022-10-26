@@ -7,7 +7,7 @@ var stompClient = null;
 export default function ChatRoom() {
   const [user, setUser] = useState({
     username: "",
-    sendername: "",
+    sendername: "", 
     connected: false,
     message: "",
     sessionName: "",
@@ -107,6 +107,19 @@ export default function ChatRoom() {
     console.log(publicChats);
   };
 
+  function sendMessageButton(disabled){
+    return (
+      <div> <div>
+      <input
+        type="text"
+        value={user.message}
+        onChange={handleMessage} 
+        disabled = {disabled}
+      
+      />
+      <button onClick={sendPublicMessage} disabled={disabled}>Send</button>
+    </div></div>)
+  }
   return (
     <div>
       {user.connected ? (
@@ -120,14 +133,8 @@ export default function ChatRoom() {
                 {chat.senderName}:{chat.message}
               </li>
             ))}
-            <div>
-              <input
-                type="text"
-                value={user.message}
-                onChange={handleMessage}
-              />
-              <button onClick={sendPublicMessage}>send</button>
-            </div>
+            {user.state ==='Online' && sendMessageButton(false)} 
+            {user.state === 'DoNotDisturb' && sendMessageButton(true)}
           </div>
           <br />
           <div>
