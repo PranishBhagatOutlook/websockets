@@ -57,6 +57,10 @@ export default function ChatRoom() {
     setShowTable(true);
   }
 
+  function hideUserList() {
+    setShowTable(false);
+  }
+
   useEffect(() => {
     getAllUsers();
   }, []);
@@ -112,7 +116,6 @@ export default function ChatRoom() {
       {user.connected ? (
         <div className="connected">
           <h1>Welcome {user.username.toUpperCase()}</h1>
-
           <div>
             {publicChats.map((chat) => (
               <li>
@@ -128,30 +131,32 @@ export default function ChatRoom() {
               <button onClick={sendPublicMessage}>send</button>
             </div>
           </div>
-
           <div>
-            {" "}
-            <button onClick={showUserList}>Show User List</button>
+            <br /> <button onClick={showUserList}>Show User List</button>
             {isLoading && <h2>Loading...</h2>}
             {showTable ? (
               <div className="showTable">
                 <table>
                   <tr>
-                    <th>Name</th>
+                    <th>Username</th>
+                    <th>State</th>
                   </tr>
                   {users.map((val, key) => {
                     return (
                       <tr key={key}>
                         <td>{val.username}</td>
+                        <td>{val.state}</td>
                       </tr>
                     );
                   })}
                 </table>
+                <button onClick={hideUserList}> Hide</button>
               </div>
             ) : (
               <div></div>
             )}
           </div>
+          <br />
           <div>
             {" "}
             <button onClick={changeStatus}>changeMystatus</button>
