@@ -109,16 +109,15 @@ export default function ChatRoom() {
 
   function sendMessageButton(disabled){
     return (
-      <div> <div>
+      <div>
       <input
         type="text"
         value={user.message}
         onChange={handleMessage} 
         disabled = {disabled}
-      
       />
       <button onClick={sendPublicMessage} disabled={disabled}>Send</button>
-    </div></div>)
+    </div>)
   }
   return (
     <div>
