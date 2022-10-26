@@ -13,6 +13,8 @@ export default function ChatRoom() {
     sessionName: "",
     state: "",
   });
+  const online = "Online"
+  const doNotDisturb = "DoNotDisturb"
   const BASE_URL = "http://localhost:8080/"
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState({ users: [] });
@@ -98,7 +100,7 @@ export default function ChatRoom() {
   };
   const onPublicMessageReceived = (message) => {
     // console.log("<<<<<<<<<<<<", user);
-    if (user.state === "Online") {
+    if (user.state === online) {
       let messageData = JSON.parse(message.body);
       publicChats.push(messageData);
       setpublicChats([...publicChats]);
@@ -124,16 +126,16 @@ export default function ChatRoom() {
       {user.connected ? (
         <div className="connected">
           <h1> User: { user.username.toUpperCase()}</h1> 
-          {user.state === "Online" && <h4> You are Online </h4>}
-          {user.state === "DoNotDisturb" && <h4> Do Not Disturb mode is ON</h4>}
+          {user.state === online && <h4> You are Online </h4>}
+          {user.state === doNotDisturb && <h4> Do Not Disturb mode is ON</h4>}
           <div>
             {publicChats.map((chat) => (
               <li>
                 {chat.senderName}:{chat.message}
               </li>
             ))}
-            {user.state ==='Online' && sendMessageButton(false)} 
-            {user.state === 'DoNotDisturb' && sendMessageButton(true)}
+            {user.state ===online && sendMessageButton(false)} 
+            {user.state === doNotDisturb && sendMessageButton(true)}
           </div>
           <br />
           <div>
@@ -164,8 +166,8 @@ export default function ChatRoom() {
           </div>
           <br />
           <div>
-            {user.state === "Online" && <button onClick={changeStatus}>Set to Do Not Disturb</button>}
-            {user.state === "DoNotDisturb" && <button onClick={changeStatus}>Set me Online</button>}
+            {user.state === online && <button onClick={changeStatus}>Set to Do Not Disturb</button>}
+            {user.state === doNotDisturb && <button onClick={changeStatus}>Set me Online</button>}
           </div>
         </div>
       ) : (
