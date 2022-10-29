@@ -21,7 +21,7 @@ export default function ChatRoom() {
   const [showTable, setShowTable] = useState(false);
   const [err, setErr] = useState("");
   const [publicChats, setpublicChats] = useState([]);
-  const [skipCount, setSkipCount] = useState(true);
+  const [skipCount, setSkipCount] = useState(false);
 
   const register = (event) => {
     setUser({ ...user, username: event.target.value });
@@ -66,6 +66,7 @@ export default function ChatRoom() {
 
   }, []);
 
+
   useEffect(() => {
     if (skipCount) {
       setSkipCount(false);
@@ -85,6 +86,9 @@ export default function ChatRoom() {
 
 
   }, [user.state]);
+  useEffect(()=>{
+    setSkipCount(true);
+  },[])
 
   const changeStatus = () => {
     axios
