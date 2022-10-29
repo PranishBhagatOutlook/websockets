@@ -21,6 +21,7 @@ export default function ChatRoom() {
   const [showTable, setShowTable] = useState(false);
   const [err, setErr] = useState("");
   const [publicChats, setpublicChats] = useState([]);
+  const [skipCount, setSkipCount] = useState(true);
 
   const register = (event) => {
     setUser({ ...user, username: event.target.value });
@@ -59,9 +60,31 @@ export default function ChatRoom() {
     setShowTable(false);
   }
 
+
   useEffect(() => {
     getAllUsers();
+
   }, []);
+
+  useEffect(() => {
+    if (skipCount) {
+      setSkipCount(false);
+      return
+    }
+    else{
+      if (stompClient) {
+        let chatMessage = {
+          senderName: user.username,
+          message: "My status is " + user.state,
+          status: "MESSAGE",
+        };
+        stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
+      }
+    }
+
+
+
+  }, [user.state]);
 
   const changeStatus = () => {
     axios
@@ -69,13 +92,9 @@ export default function ChatRoom() {
       .then((res, err) => {
         // console.log(res.data);
         setUser({ ...user, state: res.data.state });
+
       });
-    let chatMessage = {
-      senderName: user.username,
-      message: "My status is "+ user.state,
-      status: "MESSAGE",
-    };
-    stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
+
   };
   const sendPublicMessage = () => {
     // console.log("here is name", user.sessionName);
